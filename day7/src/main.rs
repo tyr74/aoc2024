@@ -16,14 +16,18 @@ fn get_valid(sol: usize, nums: &[usize]) -> usize {
     let mut nums: VecDeque<usize> = nums.to_vec().into();
     let start = nums.pop_front().expect("Nums is empty");
     let mut res = start;
-    for mut i in 0..2_usize.pow(nums.len() as u32) {
+    for mut i in 0..3_usize.pow(nums.len() as u32) {
         for &n in &nums {
-            if i % 2 == 1 {
-                res *= n;
-            } else {
-                res += n;
+            match i % 3 {
+                0 => res += n,
+                1 => res *= n,
+                2 => {
+                    res *= 10_usize.pow(n.ilog10() + 1);
+                    res += n;
+                }
+                _ => (),
             }
-            i /= 2;
+            i /= 3;
         }
         if res == sol {
             return sol;
